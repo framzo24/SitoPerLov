@@ -4,58 +4,56 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100dvh; /* meglio per mobile */
     margin: 0;
     overflow: hidden;
 }
 
 .container {
-background: white;
-padding: 50px 60px;
-border-radius: 25px;
-box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-text-align: center;
-max-width: 400px;
-width: 90%;
+    background: white;
+    padding: 40px 25px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    text-align: center;
+
+    width: 90%;
+    max-width: 350px;
 }
 
 h1 {
-margin-bottom: 40px;
-font-weight: 600;
-color: #333;
+    font-size: 24px;
+    margin-bottom: 35px;
+    font-weight: 600;
+    color: #333;
 }
 
 .buttons {
-display: flex;
-justify-content: center;
-gap: 20px;
+    display: flex;
+    flex-direction: column; /* verticale */
+    gap: 15px;
 }
 
 button {
-padding: 15px 30px;
-font-size: 18px;
-border: none;
-border-radius: 12px;
-cursor: pointer;
-transition: all 0.2s ease;
-box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-button:hover {
-transform: translateY(-3px) scale(1.05);
-box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 100%;
+    padding: 18px;
+    font-size: 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 button:active {
-transform: scale(0.95);
+    transform: scale(0.96);
 }
 
 #yesBtn {
-background: linear-gradient(135deg, #ff4d6d, #ff758f);
-color: white;
+    background: linear-gradient(135deg, #ff4d6d, #ff758f);
+    color: white;
 }
 
 #noBtn {
-background: #f0f0f0;
-color: #555;
+    background: #f0f0f0;
+    color: #555;
 }
