@@ -14,17 +14,21 @@ const noTexts = [
 let index = 0;
 let sizeMultiplier = 1;
 
-noBtn.addEventListener("click", () => {
-    if (index < noTexts.length) {
-        noBtn.textContent = noTexts[index];
-        index++;
-    } else {
-        noBtn.textContent = "Ok hai vinto 😭";
-    }
-    
-    // Aumenta la dimensione del pulsante "sì"
-    sizeMultiplier += 0.2;
-    yesBtn.style.transform = `scale(${sizeMultiplier})`;
+noBtn.addEventListener("mouseover", () => {
+
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - btnWidth;
+    const maxY = window.innerHeight - btnHeight;
+
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+    noBtn.style.transition = "all 0.1s";
 });
 
 yesBtn.addEventListener("click", () => {
