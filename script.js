@@ -14,8 +14,17 @@ const noTexts = [
 let index = 0;
 let sizeMultiplier = 1;
 
-noBtn.addEventListener("mouseover", () => {
+noBtn.addEventListener("click", () => {
 
+    // Cambia testo
+    if (index < noTexts.length) {
+        noBtn.textContent = noTexts[index];
+        index++;
+    } else {
+        noBtn.textContent = "Ok hai vinto 😭";
+    }
+
+    // Sposta il bottone random nello schermo (mobile friendly)
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
@@ -28,19 +37,18 @@ noBtn.addEventListener("mouseover", () => {
     noBtn.style.position = "fixed";
     noBtn.style.left = randomX + "px";
     noBtn.style.top = randomY + "px";
-    noBtn.style.transition = "all 0.1s";
+
+    // Rendi il bottone Sì sempre più grande
+    sizeMultiplier += 0.25;
+    yesBtn.style.transform = `scale(${sizeMultiplier})`;
 });
 
 yesBtn.addEventListener("click", () => {
     if (index === 0) {
-        // Se clicca "sì" subito, mostra il messaggio e invita a giocare
-        question.textContent = "però se clicchi subito di sì il gioco è già finito, clicca su no";
-        index = 0; // Reset per permettere di giocare
+        question.textContent = "Eh no 😏 devi almeno provare a dire no";
     } else {
-        // Dopo aver cliccato "no" almeno una volta
         question.textContent = "Sapevo che avresti detto sì 😍";
 
-        // puoi cambiare tutto il contenuto dopo il click
         document.querySelector(".buttons").innerHTML = `
             <p>Preparati per una sorpresa 💌</p>
         `;
