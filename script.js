@@ -3,12 +3,12 @@ const yesBtn = document.getElementById("yesBtn");
 const question = document.getElementById("question");
 
 const noTexts = [
-    "Sei sicura? 🥺",
-    "Ma davvero?",
-    "Dai non fare così 😢",
-    "Ci rimango male 💔",
-    "Ultima possibilità 😭",
-    "Ok sto piangendo 😭😭"
+    "Grazie per essere stata al gioco, clicca di nuovo ahah",
+    "Ah quindi mi stai ascoltando davvero? Se si, clicca",
+    "No vabbè ora incredibile che funziona, riprova",
+    "Ok ok ti piace davvero stare al gioco... vediamo (ancora)",
+    "Ultimissima volta",
+    "Grazie amore mio, è stato un piacere... ora comunicamelo"
 ];
 
 let index = 0;
@@ -45,7 +45,7 @@ noBtn.addEventListener("click", () => {
 
 yesBtn.addEventListener("click", () => {
     if (index === 0) {
-        question.textContent = "Eh no 😏 devi almeno provare a dire no";
+        question.textContent = "Subito Eccerto? Prova a cliccare sul no";
     } else {
         question.textContent = "Sapevo che avresti detto sì 😍";
 
