@@ -17,7 +17,7 @@ body {
     text-align: center;
 
     width: 90%;
-    max-width: 350px;
+    max-width: 550px;
 }
 
 h1 {
@@ -29,13 +29,14 @@ h1 {
 
 .buttons {
     display: flex;
-    flex-direction: column; /* verticale */
+    flex-direction: column;
+    align-items: center;
     gap: 15px;
 }
 
 button {
-    width: 100%;
-    padding: 18px;
+    width: fit-content;
+    padding: 18px 25px;
     font-size: 20px;
     border: none;
     border-radius: 15px;
@@ -56,4 +57,6 @@ button:active {
 #noBtn {
     background: #f0f0f0;
     color: #555;
+    max-width: 300px;
+    text-align: center;
 }
