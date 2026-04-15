@@ -2,13 +2,7 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const question = document.getElementById("question");
 
-const video = document.createElement("video");
-video.src = "video.mov";
-video.controls = true;
-video.autoplay = true;
-video.style.maxWidth = "80%";
 
-document.querySelector(".buttons").appendChild(video);
 
 const noTexts = [
     "Grazie per essere stata al gioco, clicca di nuovo ahah",
@@ -67,5 +61,12 @@ yesBtn.addEventListener("click", () => {
             msg.textContent = "Preparati per una sorpresa 💌";
             buttonsDiv.appendChild(msg);
         }
+        const video = document.createElement("video");
+video.src = "video.mov";
+video.controls = true;
+video.autoplay = true;
+video.style.maxWidth = "80%";
+
+document.querySelector(".buttons").appendChild(video);
     }
 });
