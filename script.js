@@ -47,10 +47,15 @@ noBtn.addEventListener("click", () => {
 
 const buttonsDiv = document.querySelector(".buttons");
 
+let finished = false;
+
 yesBtn.addEventListener("click", () => {
     if (index === 0) {
         question.textContent = "Subito Eccerto? Prova a cliccare sul no";
     } else {
+        if (finished) return;
+
+        finished = true;
         question.textContent = "Sapevo che avresti detto sì 😍";
 
         let msg = document.getElementById("finalMsg");
@@ -62,11 +67,11 @@ yesBtn.addEventListener("click", () => {
             buttonsDiv.appendChild(msg);
         }
         const video = document.createElement("video");
-video.src = "video.mov";
-video.controls = true;
-video.autoplay = true;
-video.style.maxWidth = "80%";
+        video.src = "video.mov";
+        video.controls = true;
+        video.autoplay = true;
+        video.style.maxWidth = "80%";
 
-document.querySelector(".buttons").appendChild(video);
+        document.querySelector(".buttons").appendChild(video);
     }
 });
