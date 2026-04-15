@@ -2,6 +2,14 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const question = document.getElementById("question");
 
+const video = document.createElement("video");
+video.src = "video.mov";
+video.controls = true;
+video.autoplay = true;
+video.style.maxWidth = "80%";
+
+document.querySelector(".buttons").appendChild(video);
+
 const noTexts = [
     "Grazie per essere stata al gioco, clicca di nuovo ahah",
     "Ah quindi mi stai ascoltando davvero? Se si, clicca",
@@ -43,14 +51,21 @@ noBtn.addEventListener("click", () => {
     yesBtn.style.transform = `scale(${sizeMultiplier})`;
 });
 
+const buttonsDiv = document.querySelector(".buttons");
+
 yesBtn.addEventListener("click", () => {
     if (index === 0) {
         question.textContent = "Subito Eccerto? Prova a cliccare sul no";
     } else {
         question.textContent = "Sapevo che avresti detto sì 😍";
 
-        document.querySelector(".buttons").innerHTML = `
-            <p>Preparati per una sorpresa 💌</p>
-        `;
+        let msg = document.getElementById("finalMsg");
+
+        if (!msg) {
+            msg = document.createElement("p");
+            msg.id = "finalMsg";
+            msg.textContent = "Preparati per una sorpresa 💌";
+            buttonsDiv.appendChild(msg);
+        }
     }
 });
