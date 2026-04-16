@@ -5,12 +5,12 @@ const question = document.getElementById("question");
 
 
 const noTexts = [
-    "Grazie per essere stata al gioco, clicca di nuovo ahah",
-    "Ah quindi mi stai ascoltando davvero? Se si, clicca",
+    "Grazie per essere stata al gioco, cliccami di nuovo ahah",
+    "Ah quindi mi stai ascoltando davvero? Cliccami",
     "No vabbè ora incredibile che funziona, riprova",
     "Ok ok ti piace davvero stare al gioco... vediamo (ancora)",
     "Ultimissima volta",
-    "Grazie amore mio, è stato un piacere... ora comunicamelo"
+    "Grazie amore mio, è stato un piacere... puoi cliccare l'altro"
 ];
 
 let index = 0;
@@ -23,7 +23,7 @@ noBtn.addEventListener("click", () => {
         noBtn.textContent = noTexts[index];
         index++;
     } else {
-        noBtn.textContent = "Ok hai vinto 😭";
+        noBtn.textContent = "Vabbè ora basta, clicca l'altro";
     }
 
     // Sposta il bottone random nello schermo (mobile friendly)
@@ -56,16 +56,8 @@ yesBtn.addEventListener("click", () => {
         if (finished) return;
 
         finished = true;
-        question.textContent = "Sapevo che avresti detto sì 😍";
-
-        let msg = document.getElementById("finalMsg");
-
-        if (!msg) {
-            msg = document.createElement("p");
-            msg.id = "finalMsg";
-            msg.textContent = "Preparati per una sorpresa 💌";
-            buttonsDiv.appendChild(msg);
-        }
+        question.textContent = "Ci mancherebbe che dicessi no eh";
+        yesBtn.style.display = "none";
         const video = document.createElement("video");
         video.src = "video.mov";
         video.controls = true;
