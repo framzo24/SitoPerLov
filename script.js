@@ -52,6 +52,7 @@ let finished = false;
 yesBtn.addEventListener("click", () => {
     if (index === 0) {
         question.textContent = "Subito Eccerto? Prova a cliccare sul no";
+        return;
     } else {
         if (finished) return;
 
@@ -64,6 +65,6 @@ yesBtn.addEventListener("click", () => {
         video.autoplay = true;
         video.style.maxWidth = "80%";
 
-        document.querySelector(".buttons").appendChild(video);
+        buttonsDiv.appendChild(video);
     }
 });
