@@ -1,5 +1,5 @@
 const question = document.getElementById("question");
-const continueBtn = document.getElementById("continueBtn");
+const continueBtn = document.getElementById("yesBtn");
 const buttonsDiv = document.getElementById("buttons");
 
 // 🔥 CONFIGURAZIONE (CAMBIA QUI)
