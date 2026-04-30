@@ -2,7 +2,7 @@
 const question = document.getElementById("question");
 
 // 🔥 CONFIGURA QUI
-const unlockTime = new Date("2026-04-30T18:05:00+02:00"); // data e ora di sblocco (30 aprile 2026 alle 18:00)
+const unlockTime = new Date(Date.now() + 60000);
 const finalText = "Forse non te ne accorgi, ma ogni giorno cerco di fare lo stesso cioè trovare modi per farti sentire bene, al sicuro, bella e veramente amata. Non so se lo faccio sempre giusto, ma quelle saranno per sempre le mie intenzioni 💖";
 
 // ⏱ format tempo
