@@ -1,65 +1,23 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<title>Countdown</title>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background: #f5f5f5;
-    }
-
-    #text {
-        font-size: 30px;
-        text-align: center;
-    }
-</style>
-</head>
-
-<body>
-
-<div id="text"></div>
-<button id="nextBtn" style="display:none;">Timer per la prossima ⏭</button>
-<button id="readBtn" style="display:none;">Ho letto 💌</button>
-
 <script>
 const text = document.getElementById("text");
 const nextBtn = document.getElementById("nextBtn");
-const readBtn = document.getElementById("readBtn");
-const TOKEN = "8729533883:AAFVBAQML5d4H-5oY7hvrp8cY4E2UsQA0A0";
-const CHAT_ID = "709029093";
 
-document.getElementById("readBtn").addEventListener("click", () => {
-    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: "Caramellina ha letto il messaggio 💖"
-        })
-    });
-});
+const TOKEN = "TUO_TOKEN";
+const CHAT_ID = "TUO_CHAT_ID";
 
 const events = [
     {
-        date: new Date('2024-06-30T19:27:00+02:00'),
+        date: new Date('2026-04-30T20:00:00+02:00'),
         message: "Prima frase 💌"
     },
     {
-        date: new Date('2024-07-01T19:29:00+02:00'),
+        date: new Date('2026-05-01T20:00:00+02:00'),
         message: "Seconda frase 🌙"
     }
 ];
 
 let currentIndex = 0;
+let unlocked = false; // 🔥 stato del singolo step
 
 function getTimeRemaining(target) {
     const now = new Date();
@@ -72,37 +30,58 @@ function getTimeRemaining(target) {
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
 
-    return `${days}g ${hours}h ${minutes}m ${seconds}s`;
+    return `${days} giorni, ${hours} ore, ${minutes} minuti e ${seconds} secondi`;
 }
 
 function update() {
     if (currentIndex >= events.length) {
         text.textContent = "Fine 💫";
+        nextBtn.style.display = "none";
         return;
     }
 
     const event = events[currentIndex];
-    const timeLeft = getTimeRemaining(event.date);
 
-    if (timeLeft) {
-        text.textContent = `Prossimo messaggio tra ${timeLeft}`;
-        nextBtn.style.display = "none";
-        readBtn.style.display = "none";
-    } else {
+    // 🔥 SE NON SBLOCCATO → countdown
+    if (!unlocked) {
+        const timeLeft = getTimeRemaining(event.date);
+
+        if (timeLeft) {
+            text.textContent = `Prossimo messaggio tra ${timeLeft}`;
+            nextBtn.style.display = "none";
+        } else {
+            unlocked = true; // 🔥 blocca lo stato
+        }
+    }
+
+    // 🔥 SE SBLOCCATO → frase + bottone
+    if (unlocked) {
         text.textContent = event.message;
-
         nextBtn.style.display = "inline-block";
-        readBtn.style.display = "inline-block";
     }
 }
 
-// click prossimo
+// CLICK → notifica + prossimo step
 nextBtn.addEventListener("click", () => {
+
+    // 🔔 notifica
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: `Ha letto il messaggio ${currentIndex + 1} 💖`
+        })
+    });
+
+    // prossimo
     currentIndex++;
+    unlocked = false; // 🔥 reset stato
     update();
 });
 
-// aggiornamento live
 setInterval(update, 1000);
 update();
 </script>
