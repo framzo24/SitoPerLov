@@ -1,16 +1,60 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Domanda importante ❤️</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Countdown</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: #f5f5f5;
+    }
+
+    #text {
+        font-size: 30px;
+        text-align: center;
+    }
+</style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1 id="question">A</h1>
-</div>
+<div id="text"></div>
 
-<script src="script.js"></script>
+<script>
+const text = document.getElementById("text");
+
+// 🔥 METTI QUI LA DATA
+const targetDate = new Date("2026-04-30T20:00:00+02:00");
+
+// funzione countdown
+function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+        text.textContent = "Ciao";
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+    text.textContent = `${days} giorni, ${hours} ore e ${minutes} minuti`;
+}
+
+// aggiorna ogni secondo
+setInterval(updateCountdown, 1000);
+
+// avvio immediato
+updateCountdown();
+</script>
+
 </body>
 </html>
