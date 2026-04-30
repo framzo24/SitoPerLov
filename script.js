@@ -1,70 +1,88 @@
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
 const question = document.getElementById("question");
+const continueBtn = document.getElementById("continueBtn");
+const buttonsDiv = document.getElementById("buttons");
 
-
-
-const noTexts = [
-    "Grazie per essere stata al gioco, cliccami di nuovo ahah",
-    "Ah quindi mi stai ascoltando davvero? Cliccami",
-    "No vabbè ora incredibile che funziona, riprova",
-    "Ok ok ti piace davvero stare al gioco... vediamo (ancora)",
-    "Ultimissima volta",
-    "Grazie amore mio, è stato un piacere... puoi cliccare l'altro"
+// 🔥 CONFIGURAZIONE (CAMBIA QUI)
+const steps = [
+    {
+        text: "Forse non te ne accorgi, ma ogni giorno cerco di fare lo stesso cioè trovare modi per farti sentire bene, al sicuro, bella e veramente amata. Non so se lo faccio sempre giusto, ma quelle saranno per sempre le mie intenzioni.",
+        unlock: new Date("2026-04-30T17:55:00")
+    },
+    {
+        text: "Giorno 2: Ok, vedo che sei curiosa...",
+        unlock: new Date("2026-04-25T18:00:00")
+    },
+    {
+        text: "Giorno 3: A questo punto sei dentro al gioco 😌",
+        unlock: new Date("2026-04-27T12:00:00")
+    },
+    {
+        text: "Giorno 4: Ultimo livello...",
+        unlock: new Date("2026-04-29T20:00:00"),
+        video: "video.mov"
+    }
 ];
 
-let index = 0;
-let sizeMultiplier = 1;
+// 🔒 Stato salvato
+let currentStep = parseInt(localStorage.getItem("step")) || 0;
 
-noBtn.addEventListener("click", () => {
+// ⏱ Funzione tempo rimanente
+function getTimeRemaining(target) {
+    const now = new Date();
+    const diff = target - now;
 
-    // Cambia testo
-    if (index < noTexts.length) {
-        noBtn.textContent = noTexts[index];
-        index++;
-    } else {
-        noBtn.textContent = "Vabbè ora basta, clicca l'altro";
+    if (diff <= 0) return null;
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+    return `${hours}h ${minutes}m`;
+}
+
+// 🎬 Mostra contenuto
+function render() {
+    const now = new Date();
+
+    if (currentStep >= steps.length) {
+        question.textContent = "Fine 😌";
+        continueBtn.style.display = "none";
+        return;
     }
 
-    // Sposta il bottone random nello schermo (mobile friendly)
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
+    const step = steps[currentStep];
 
-    const maxX = window.innerWidth - btnWidth;
-    const maxY = window.innerHeight - btnHeight;
-
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
-
-    noBtn.style.position = "fixed";
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
-
-    // Rendi il bottone Sì sempre più grande
-    sizeMultiplier += 0.25;
-    yesBtn.style.transform = `scale(${sizeMultiplier})`;
-});
-
-const buttonsDiv = document.querySelector(".buttons");
-
-let finished = false;
-
-yesBtn.addEventListener("click", () => {
-    if (index === 0) {
-        question.textContent = "Subito Eccerto? Prova a cliccare sul no";
-        return;
+    if (now >= step.unlock) {
+        question.textContent = step.text;
+        continueBtn.style.display = "inline-block";
     } else {
-        if (finished) return;
+        const timeLeft = getTimeRemaining(step.unlock);
+        question.textContent = `Non ancora... torna tra ${timeLeft}`;
+        continueBtn.style.display = "none";
+    }
+}
 
-        finished = true;
-        question.textContent = "Ci mancherebbe che dicessi no eh";
-        yesBtn.style.display = "none";
+// 👉 Click continua
+continueBtn.addEventListener("click", () => {
+    const step = steps[currentStep];
+
+    // Se ha video → mostra video finale
+    if (step.video) {
+        continueBtn.style.display = "none";
         const video = document.createElement("video");
-        video.src = "video.mov";
+        video.src = step.video;
         video.controls = true;
         video.autoplay = true;
-        video.style.maxWidth = "80%";
-
+        video.style.maxWidth = "100%";
         buttonsDiv.appendChild(video);
     }
+
+    currentStep++;
+    localStorage.setItem("step", currentStep);
+    render();
 });
+
+// 🔁 Aggiorna ogni minuto
+setInterval(render, 60000);
+
+// Avvio
+render();
