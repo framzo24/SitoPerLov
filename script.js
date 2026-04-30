@@ -1,32 +1,11 @@
+
 const question = document.getElementById("question");
-const continueBtn = document.getElementById("yesBtn");
-const buttonsDiv = document.getElementById("buttons");
 
-// 🔥 CONFIGURAZIONE (CAMBIA QUI)
-const steps = [
-    {
-        text: "Forse non te ne accorgi, ma ogni giorno cerco di fare lo stesso cioè trovare modi per farti sentire bene, al sicuro, bella e veramente amata. Non so se lo faccio sempre giusto, ma quelle saranno per sempre le mie intenzioni.",
-        unlock: new Date("2026-04-30T17:55:00")
-    },
-    {
-        text: "Giorno 2: Ok, vedo che sei curiosa...",
-        unlock: new Date("2026-04-25T18:00:00")
-    },
-    {
-        text: "Giorno 3: A questo punto sei dentro al gioco 😌",
-        unlock: new Date("2026-04-27T12:00:00")
-    },
-    {
-        text: "Giorno 4: Ultimo livello...",
-        unlock: new Date("2026-04-29T20:00:00"),
-        video: "video.mov"
-    }
-];
+// 🔥 CONFIGURA QUI
+const unlockTime = new Date("2026-04-30T18:00:00");
+const finalText = "Forse non te ne accorgi, ma ogni giorno cerco di fare lo stesso cioè trovare modi per farti sentire bene, al sicuro, bella e veramente amata. Non so se lo faccio sempre giusto, ma quelle saranno per sempre le mie intenzioni 💖";
 
-// 🔒 Stato salvato
-let currentStep = parseInt(localStorage.getItem("step")) || 0;
-
-// ⏱ Funzione tempo rimanente
+// ⏱ format tempo
 function getTimeRemaining(target) {
     const now = new Date();
     const diff = target - now;
@@ -35,54 +14,24 @@ function getTimeRemaining(target) {
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-    return `${hours}h ${minutes}m`;
+    return `${hours}h ${minutes}m ${seconds}s`;
 }
 
-// 🎬 Mostra contenuto
+// 🔁 render
 function render() {
-    const now = new Date();
+    const timeLeft = getTimeRemaining(unlockTime);
 
-    if (currentStep >= steps.length) {
-        question.textContent = "Fine 😌";
-        continueBtn.style.display = "none";
-        return;
-    }
-
-    const step = steps[currentStep];
-
-    if (now >= step.unlock) {
-        question.textContent = step.text;
-        continueBtn.style.display = "inline-block";
+    if (timeLeft) {
+        question.textContent = `Torna tra ${timeLeft} ⏳`;
     } else {
-        const timeLeft = getTimeRemaining(step.unlock);
-        question.textContent = `Non ancora... torna tra ${timeLeft}`;
-        continueBtn.style.display = "none";
+        question.textContent = finalText;
     }
 }
 
-// 👉 Click continua
-continueBtn.addEventListener("click", () => {
-    const step = steps[currentStep];
+// aggiorna ogni secondo (più figo)
+setInterval(render, 1000);
 
-    // Se ha video → mostra video finale
-    if (step.video) {
-        continueBtn.style.display = "none";
-        const video = document.createElement("video");
-        video.src = step.video;
-        video.controls = true;
-        video.autoplay = true;
-        video.style.maxWidth = "100%";
-        buttonsDiv.appendChild(video);
-    }
-
-    currentStep++;
-    localStorage.setItem("step", currentStep);
-    render();
-});
-
-// 🔁 Aggiorna ogni minuto
-setInterval(render, 60000);
-
-// Avvio
+// avvio
 render();
