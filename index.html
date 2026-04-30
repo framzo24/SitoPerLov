@@ -30,7 +30,7 @@
 const text = document.getElementById("text");
 
 // 🔥 METTI QUI LA DATA
-const targetDate = new Date("2026-04-30T20:00:00+02:00");
+const targetDate = new Date("2026-04-30T18:40:00+02:00");
 
 // funzione countdown
 function updateCountdown() {
@@ -38,15 +38,16 @@ function updateCountdown() {
     const diff = targetDate - now;
 
     if (diff <= 0) {
-        text.textContent = "Ciao";
+        text.textContent = "Forse non te ne accorgi, ma ogni giorno cerco di fare lo stesso cioè trovare modi per farti sentire bene, al sicuro, bella e veramente amata. Non so se lo faccio sempre giusto, ma quelle saranno per sempre le mie intenzioni.";
         return;
     }
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-    text.textContent = `${days} giorni, ${hours} ore e ${minutes} minuti`;
+    text.textContent = `${days} giorni, ${hours} ore, ${minutes} minuti e ${seconds} secondi`;
 }
 
 // aggiorna ogni secondo
