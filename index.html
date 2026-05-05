@@ -18,7 +18,7 @@
     }
 
     #text {
-        font-size: 42px; /* 🔥 più grande */
+        font-size: 42px;
         text-align: center;
         max-width: 700px;
         line-height: 1.4;
@@ -40,19 +40,28 @@
     #nextBtn:hover {
         transform: scale(1.05);
     }
+
+    #nextBtn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
 </style>
 </head>
 
 <body>
 
 <div id="text"></div>
-<button id="nextBtn">Timer per la prossima ⏭</button><script>
+<button id="nextBtn">Timer per la prossima ⏭</button>
+
+<script>
 const text = document.getElementById("text");
 const nextBtn = document.getElementById("nextBtn");
 
+// 🔐 METTI I TUOI DATI
 const TOKEN = "8729533883:AAFVBAQML5d4H-5oY7hvrp8cY4E2UsQA0A0";
 const CHAT_ID = "709029093";
 
+// 📅 Eventi
 const events = [
     {
         date: new Date('2026-05-04T22:08:00+02:00'),
@@ -140,9 +149,25 @@ const events = [
     }
 ];
 
+// 🔁 Stato
 let currentIndex = 0;
-let unlocked = false; // 🔥 stato del singolo step
+let unlocked = false;
+let unlockTime = null;
 
+// 🔐 Carica stato salvato
+const savedIndex = localStorage.getItem("currentIndex");
+const savedEvents = localStorage.getItem("events");
+
+if (savedIndex !== null) currentIndex = parseInt(savedIndex);
+
+if (savedEvents) {
+    const parsed = JSON.parse(savedEvents);
+    parsed.forEach((e, i) => {
+        events[i].date = new Date(e.date);
+    });
+}
+
+// ⏱ Countdown
 function getTimeRemaining(target) {
     const now = new Date();
     const diff = target - now;
@@ -157,6 +182,7 @@ function getTimeRemaining(target) {
     return `${days} giorni, ${hours} ore, ${minutes} minuti e ${seconds} secondi`;
 }
 
+// 🔄 Update
 function update() {
     if (currentIndex >= events.length) {
         text.textContent = "Fine 💫";
@@ -165,8 +191,9 @@ function update() {
     }
 
     const event = events[currentIndex];
+    const now = new Date();
 
-    // 🔥 SE NON SBLOCCATO → countdown
+    // 🔒 Countdown
     if (!unlocked) {
         const timeLeft = getTimeRemaining(event.date);
 
@@ -174,21 +201,58 @@ function update() {
             text.textContent = `Prossimo messaggio tra ${timeLeft}`;
             nextBtn.style.display = "none";
         } else {
-            unlocked = true; // 🔥 blocca lo stato
+            unlocked = true;
+            unlockTime = new Date();
         }
     }
 
-    // 🔥 SE SBLOCCATO → frase + bottone
+    // ⏱ Se passano 12 ore senza click
+    if (unlocked && unlockTime && (now - unlockTime > 12 * 60 * 60 * 1000)) {
+
+        if (events[currentIndex + 1]) {
+            events[currentIndex + 1].date = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        }
+
+        // 🔔 Notifica mancata lettura
+        fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: `Non ha letto il messaggio ${currentIndex + 1} entro 12 ore 😅`
+            })
+        });
+
+        currentIndex++;
+        unlocked = false;
+        unlockTime = null;
+
+        // 💾 Salva
+        localStorage.setItem("currentIndex", currentIndex);
+        localStorage.setItem("events", JSON.stringify(events));
+
+        return;
+    }
+
+    // 💌 Mostra frase
     if (unlocked) {
         text.textContent = event.message;
         nextBtn.style.display = "inline-block";
+        nextBtn.disabled = false;
     }
 }
 
-// CLICK → notifica + prossimo step
+// 👉 CLICK
 nextBtn.addEventListener("click", () => {
 
-    // 🔔 notifica
+    // 🔒 Anti spam
+    nextBtn.disabled = true;
+
+    // 🔔 Notifica lettura con orario
+    const now = new Date().toLocaleString();
+
     fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
         method: "POST",
         headers: {
@@ -196,16 +260,26 @@ nextBtn.addEventListener("click", () => {
         },
         body: JSON.stringify({
             chat_id: CHAT_ID,
-            text: `Ha letto il messaggio ${currentIndex + 1} 💖`
+            text: `Ha letto il messaggio ${currentIndex + 1} alle ${now} 💖`
         })
     });
 
-    // prossimo
+    // ➡️ Prossimo
     currentIndex++;
-    unlocked = false; // 🔥 reset stato
+    unlocked = false;
+    unlockTime = null;
+
+    // 💾 Salva
+    localStorage.setItem("currentIndex", currentIndex);
+    localStorage.setItem("events", JSON.stringify(events));
+
     update();
 });
 
+// 🔁 Loop
 setInterval(update, 1000);
 update();
 </script>
+
+</body>
+</html>
